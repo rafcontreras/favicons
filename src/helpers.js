@@ -8,7 +8,7 @@ const colors = require("colors");
 const jsonxml = require("jsontoxml");
 const sizeOf = require("image-size");
 const Jimp = require("jimp");
-const svg2png = require("svg2png");
+const sharp = require("sharp");
 const PLATFORM_OPTIONS = require("./config/platform-options.json");
 
 module.exports = function(options) {
@@ -232,8 +232,44 @@ module.exports = function(options) {
         let promise = null;
 
         if (svgSource) {
+          const background = { r: 0, g: 0, b: 0, alpha: 0 };
+
           log("Image:render", `Rendering SVG to ${width}x${height}`);
-          promise = svg2png(svgSource.file, { height, width }).then(Jimp.read);
+          promise = sharp(svgSource.file)
+            .resize({
+              background,
+              width,
+              height,
+              fit: sharp.fit.inside
+            })
+            .toBuffer({ resolveWithObject: true })
+            .then(({ data, info }) => {
+              if (info.width < width) {
+                return sharp(data)
+                  .extend({
+                    background,
+                    top: 0,
+                    bottom: 0,
+                    left: (width - info.width) >> 1,
+                    right: (width - info.width + 1) >> 1
+                  })
+                  .toBuffer()
+                  .then(Jimp.read);
+              }
+              if (info.height < height) {
+                return sharp(data)
+                  .extend({
+                    background,
+                    left: 0,
+                    right: 0,
+                    top: (height - info.height) >> 1,
+                    bottom: (height - info.height + 1) >> 1
+                  })
+                  .toBuffer()
+                  .then(Jimp.read);
+              }
+              return Jimp.read(data);
+            });
         } else {
           const sideSize = Math.max(width, height);
 
