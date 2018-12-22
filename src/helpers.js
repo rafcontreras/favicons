@@ -221,8 +221,12 @@ module.exports = function(options) {
           } with offset ${offset}`
         );
 
-        const width = properties.width - offset * 2;
-        const height = properties.height - offset * 2;
+        const width =
+          (properties.rotate ? properties.height : properties.width) -
+          offset * 2;
+        const height =
+          (properties.rotate ? properties.width : properties.height) -
+          offset * 2;
         const svgSource = sourceset.find(source => source.size.type === "svg");
 
         let promise = null;
