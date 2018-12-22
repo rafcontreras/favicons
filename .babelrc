@@ -1,20 +1,19 @@
 {
   "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "node": "4"
-      },
-      "useBuiltIns": "usage",
-      "exclude": [
-        "transform-regenerator"
-      ]
-    }]
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "5"
+        },
+        "useBuiltIns": "usage",
+        "exclude": ["transform-regenerator"]
+      }
+    ]
   ],
   "env": {
     "test": {
-      "plugins": [
-        "istanbul"
-      ]
+      "plugins": ["istanbul"]
     }
   }
 }
