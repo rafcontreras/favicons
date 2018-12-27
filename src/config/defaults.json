@@ -28,6 +28,6 @@
     "windows": true,
     "yandex": true
   },
-  "prefer_related_applications": false,
-  "related_applications": []
+  "preferRelatedApplications": false,
+  "relatedApplications": []
 }

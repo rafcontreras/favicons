@@ -150,7 +150,6 @@ module.exports = function(options) {
             properties.background_color = options.background;
             properties.theme_color = options.theme_color;
             properties.icons.map(icon => (icon.src = relative(icon.src)));
-            properties.prefer_related_applications = options.preferRelatedApplications || false;
             properties = JSON.stringify(properties, null, 2);
           } else if (name === "manifest.webapp") {
             properties.version = options.version;
@@ -158,6 +157,7 @@ module.exports = function(options) {
             properties.description = options.appDescription;
             properties.developer.name = options.developerName;
             properties.developer.url = options.developerURL;
+            properties.prefer_related_applications = options.preferRelatedApplications;
             properties.icons = Object.keys(properties.icons).reduce(
               (obj, key) =>
                 Object.assign(obj, {
